@@ -19332,8 +19332,6 @@ module.exports = function(module) {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-__webpack_require__(/*! ./createUser */ "./resources/js/createUser.js");
-
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
@@ -19351,6 +19349,7 @@ window._ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
  */
 
 window.axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+window.axios.defaults.baseURL = 'http://localhost:8000/';
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
@@ -19384,7 +19383,6 @@ window.toggleImagePreviewVisibility = function () {
 };
 
 window.setImagePreview = function (e) {
-  //validar si es imagen
   var imagenPreview = document.getElementById('imagen_preview');
   var imagenPreviewURL = URL.createObjectURL(e.target.files[0]);
   imagenPreview.src = imagenPreviewURL;
@@ -19405,6 +19403,40 @@ window.togglePasswordVisibility = function () {
   }
 };
 
+window.rutInput = document.getElementById('rut');
+
+window.rutInput.onblur = function (e) {
+  if (Fn.validaRut(e.target.value)) {
+    if (rutInput.classList.contains('is-invalid')) {
+      rutInput.classList.remove('is-invalid');
+    }
+  } else {
+    rutInput.classList.add('is-invalid');
+  }
+};
+
+window.Fn = {
+  // Valida el rut con su cadena completa "XXXXXXXX-X"
+  validaRut: function validaRut(rutCompleto) {
+    if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
+    var tmp = rutCompleto.split('-');
+    var digv = tmp[1];
+    var rut = tmp[0];
+    if (digv == 'K') digv = 'k';
+    return Fn.dv(rut) == digv;
+  },
+  dv: function dv(T) {
+    var M = 0,
+        S = 1;
+
+    for (; T; T = Math.floor(T / 10)) {
+      S = (S + T % 10 * (9 - M++ % 6)) % 11;
+    }
+
+    return S ? S - 1 : 'k';
+  }
+};
+
 /***/ }),
 
 /***/ "./resources/sass/app.scss":
@@ -19419,13 +19451,14 @@ window.togglePasswordVisibility = function () {
 /***/ }),
 
 /***/ 0:
-/*!*************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
-  \*************************************************************/
+/*!******************************************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/js/createUser.js ./resources/sass/app.scss ***!
+  \******************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /home/alexi/proyectos/laravel/webtres/resources/js/app.js */"./resources/js/app.js");
+__webpack_require__(/*! /home/alexi/proyectos/laravel/webtres/resources/js/createUser.js */"./resources/js/createUser.js");
 module.exports = __webpack_require__(/*! /home/alexi/proyectos/laravel/webtres/resources/sass/app.scss */"./resources/sass/app.scss");
 
 
