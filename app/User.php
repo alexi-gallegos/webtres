@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+\Carbon\Carbon::setToStringFormat('d/m/Y');
 
 
 class User extends Authenticatable
@@ -39,6 +40,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $dates = ['fecha_nacimiento'];
 
     public function get_users(){
         return $this::select('rut', 'nombres', 'apellido_paterno', 'apellido_materno','fecha_nacimiento', 'email', 'imagen')
