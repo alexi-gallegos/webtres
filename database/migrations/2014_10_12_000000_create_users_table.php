@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('imagen');
             $table->string('email')->unique();
             $table->string('password');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
