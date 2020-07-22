@@ -2,8 +2,16 @@
 
 @section('title', 'Usuarios')
 
+@push('styles')
+    <style>
+        table{
+            white-space: nowrap;
+        }
+    </style>
+@endpush
+
 @section('content')
-<table class="table table-striped">
+<table class="table col-md-9 mx-auto table-striped">
     <thead>
       <tr>
         <th scope="col"></th>
@@ -35,5 +43,7 @@
     </tbody>
   </table>
 
-    {{ $users->links() }}
+    <div class="row justify-content-center">
+        {{ $users->links() }}
+    </div>
 @endsection
