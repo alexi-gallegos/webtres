@@ -11,6 +11,7 @@
 @endpush
 
 @section('content')
+@include('partials.header')
 <table class="table col-md-9 mx-auto table-striped">
     <thead>
       <tr>
