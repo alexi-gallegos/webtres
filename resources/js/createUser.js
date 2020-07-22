@@ -13,3 +13,16 @@ window.setImagePreview = function(e){
     toggleImagePreviewVisibility();
      console.log(e.target.files[0]);
 }
+
+window.togglePasswordVisibility = function(){
+    var iconoEye = document.getElementById('icono_eye');
+    var passwordInput = document.getElementById('password');
+
+    if(passwordInput.getAttribute('type') == "password"){
+        iconoEye.className = "fa fa-eye-slash";
+        passwordInput.setAttribute('type', 'text');
+    } else{
+        iconoEye.className = "fa fa-eye";
+        passwordInput.setAttribute('type', 'password');
+    }
+}
