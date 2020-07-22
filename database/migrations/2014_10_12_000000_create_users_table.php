@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('apellido_paterno');
             $table->string('apellido_materno');
             $table->date('fecha_nacimiento');
+            $table->string('imagen');
             $table->string('email')->unique();
             $table->string('password');
             $table->timestamps();
