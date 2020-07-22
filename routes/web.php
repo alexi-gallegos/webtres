@@ -13,4 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'UserController@index');
+Route::redirect('/', '/users');
+Route::get('users', 'UserController@index');
+Route::get('users/create', 'UserController@create');
+
