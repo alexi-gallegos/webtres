@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container-fluid">
-        @yield('section')
+        @yield('content')
     </div>
 </body>
 </html>
