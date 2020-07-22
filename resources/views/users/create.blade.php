@@ -5,6 +5,7 @@
 @section('content')
 <div class="row justify-content-center my-3">
     <form class="col-md-6"  enctype="multipart/form-data">
+        @csrf
         <div class="form-group">
               <label for="nombresInput">Nombres</label>
               <input 
@@ -85,9 +86,10 @@
               min="5"
           >
           <div class="input-group-prepend">
-              <span class="input-group-text">
+              <span onclick="togglePasswordVisibility()" class="input-group-text">
                   <i 
                       class="fa fa-eye" 
+                      id="icono_eye"
                       aria-hidden="true"
                   ></i>
               </span>
@@ -99,14 +101,17 @@
     <div class="form-group mt-3 ">
         <label for="exampleFormControlFile1">Elegir foto de perfil</label>
         <img 
-              src="https://cxl.com/wp-content/uploads/2016/03/nate_munger.png" 
-              class="rounded-circle mx-auto d-block"
-              width="120px" 
+            style="display:none;"
+            src="" 
+            class="rounded-circle mx-auto d-block"
+            id="imagen_preview"
+            width="120px" 
         >
         <input 
           type="file" 
           name="path_to_image" 
           accept="image/*"
+          onchange="setImagePreview(event)"
           class="form-control-file" 
           id="exampleFormControlFile1"
         >
