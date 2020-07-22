@@ -25,6 +25,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email' => $faker->unique()->safeEmail,
         'fecha_nacimiento' => $faker->date,
         'password' => Hash::make('password'), // password
-        'path_to_image' => 'storage/images/user.webp'
+        'imagen' => 'storage/images/user.webp'
     ];
 });
