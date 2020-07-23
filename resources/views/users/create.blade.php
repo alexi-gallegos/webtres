@@ -4,8 +4,7 @@
 
 @section('content')
 <div class="row justify-content-center my-3">
-    <form class="col-md-6"  enctype="multipart/form-data">
-        @csrf
+    <form class="col-md-6" id="crear_usuario_form" enctype="multipart/form-data">
         <div class="form-group">
               <label for="nombresInput">Nombres</label>
               <input 
@@ -76,7 +75,7 @@
           >
       </div>
       <label for="passwordInput">Contraseña</label>
-      <div class="input-group mb-2">
+      <div id="password_container" class="input-group mb-2">
           <input 
               type="password" 
               name="password"
@@ -113,7 +112,7 @@
           accept="image/*"
           onchange="setImagePreview(event)"
           class="form-control-file" 
-          id="exampleFormControlFile1"
+          id="imagen"
         >
     </div>  
     <div class="row">
@@ -125,3 +124,7 @@
     </form>
 </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/createUser.js') }}"></script>
+@endpush
