@@ -19367,139 +19367,6 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 /***/ }),
 
-/***/ "./resources/js/createUser.js":
-/*!************************************!*\
-  !*** ./resources/js/createUser.js ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return; var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-//mostrar y ocultar preview de la imagen
-window.toggleImagePreviewVisibility = function () {
-  var imagenPreview = document.getElementById('imagen_preview');
-
-  if (imagenPreview.style.display == "none") {
-    imagenPreview.style.display = "block";
-  }
-}; //crear imagen para mostrar
-
-
-window.setImagePreview = function (e) {
-  var imagenPreview = document.getElementById('imagen_preview');
-  var imagenPreviewURL = URL.createObjectURL(e.target.files[0]);
-  imagenPreview.src = imagenPreviewURL;
-  toggleImagePreviewVisibility();
-  console.log(e.target.files[0]);
-}; //toggle visibilidad de password y cambio de icono.
-
-
-window.togglePasswordVisibility = function () {
-  var iconoEye = document.getElementById('icono_eye');
-  var passwordInput = document.getElementById('password');
-
-  if (passwordInput.getAttribute('type') == "password") {
-    iconoEye.className = "fa fa-eye-slash";
-    passwordInput.setAttribute('type', 'text');
-  } else {
-    iconoEye.className = "fa fa-eye";
-    passwordInput.setAttribute('type', 'password');
-  }
-}; //validar rut
-
-
-window.rutInput = document.getElementById('rut');
-
-window.rutInput.onblur = function (e) {
-  if (Fn.validaRut(e.target.value)) {
-    if (rutInput.classList.contains('is-invalid')) {
-      rutInput.classList.remove('is-invalid');
-    }
-  } else {
-    rutInput.classList.add('is-invalid');
-  }
-}; //función que valida el rut
-
-
-window.Fn = {
-  // Valida el rut con su cadena completa "XXXXXXXX-X"
-  validaRut: function validaRut(rutCompleto) {
-    if (!/^[0-9]+[-|‐]{1}[0-9kK]{1}$/.test(rutCompleto)) return false;
-    var tmp = rutCompleto.split('-');
-    var digv = tmp[1];
-    var rut = tmp[0];
-    if (digv == 'K') digv = 'k';
-    return Fn.dv(rut) == digv;
-  },
-  dv: function dv(T) {
-    var M = 0,
-        S = 1;
-
-    for (; T; T = Math.floor(T / 10)) {
-      S = (S + T % 10 * (9 - M++ % 6)) % 11;
-    }
-
-    return S ? S - 1 : 'k';
-  }
-}; //funcion para crear usuario
-
-window.formCrearUsuario = document.getElementById('crear_usuario_form');
-window.formCrearUsuario.addEventListener('submit', function (event) {
-  event.preventDefault();
-  $("div").remove("#error_form_usuario");
-  var userFormData = new FormData();
-  userFormData.append('nombres', $("#nombres").val());
-  userFormData.append('apellido_paterno', $("#apellido_paterno").val());
-  userFormData.append('apellido_materno', $("#apellido_materno").val());
-  userFormData.append('rut', $("#rut").val());
-  userFormData.append('email', $("#email").val());
-  userFormData.append('fecha_nacimiento', $("#fecha_nacimiento").val());
-  userFormData.append('password', $("#password").val());
-  userFormData.append('imagen', $("#imagen").prop('files')[0]);
-  axios.post('api/users', userFormData).then(function (res) {
-    return console.log(res);
-  })["catch"](function (err) {
-    console.log(err.response);
-
-    if (err.response.status == 422) {
-      var errores = err.response.data.errors;
-
-      var divError = function divError(id, value) {
-        return $("#".concat(id)).after("<div id=\"error_form_usuario\" class=\"invalid-feedback d-block\">*".concat(value, "</div>"));
-      };
-
-      for (var _i = 0, _Object$entries = Object.entries(errores); _i < _Object$entries.length; _i++) {
-        var _Object$entries$_i = _slicedToArray(_Object$entries[_i], 2),
-            key = _Object$entries$_i[0],
-            value = _Object$entries$_i[1];
-
-        if (key == 'password') {
-          divError('password_container', value);
-        } else if (value.length == 1 && key != 'password') {
-          divError(key, value);
-        } else {
-          for (var i = 0; i < value.length; i++) {
-            divError(key, value);
-          }
-        }
-      }
-    }
-  });
-});
-
-/***/ }),
-
 /***/ "./resources/sass/app.scss":
 /*!*********************************!*\
   !*** ./resources/sass/app.scss ***!
@@ -19512,14 +19379,13 @@ window.formCrearUsuario.addEventListener('submit', function (event) {
 /***/ }),
 
 /***/ 0:
-/*!******************************************************************************************!*\
-  !*** multi ./resources/js/app.js ./resources/js/createUser.js ./resources/sass/app.scss ***!
-  \******************************************************************************************/
+/*!*************************************************************!*\
+  !*** multi ./resources/js/app.js ./resources/sass/app.scss ***!
+  \*************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(/*! /home/alexi/proyectos/laravel/webtres/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /home/alexi/proyectos/laravel/webtres/resources/js/createUser.js */"./resources/js/createUser.js");
 module.exports = __webpack_require__(/*! /home/alexi/proyectos/laravel/webtres/resources/sass/app.scss */"./resources/sass/app.scss");
 
 

@@ -1,3 +1,5 @@
+const Swal = require('sweetalert2')
+
 //mostrar y ocultar preview de la imagen
 window.toggleImagePreviewVisibility = function(){
     var imagenPreview = document.getElementById('imagen_preview');
@@ -12,7 +14,6 @@ window.setImagePreview = function(e){
     var imagenPreviewURL = URL.createObjectURL(e.target.files[0]);
     imagenPreview.src = imagenPreviewURL;
     toggleImagePreviewVisibility();
-     console.log(e.target.files[0]);
 }
 
 //toggle visibilidad de password y cambio de icono.
@@ -31,15 +32,17 @@ window.togglePasswordVisibility = function(){
 
 //validar rut
 window.rutInput = document.getElementById('rut');
-window.rutInput.onblur = function(e){
-            if(Fn.validaRut(e.target.value)){
-                if(rutInput.classList.contains('is-invalid')){
-                    rutInput.classList.remove('is-invalid');
-                }
-            }else{
-                rutInput.classList.add('is-invalid');
+if(window.rutInput){
+    window.rutInput.onblur = function(e){
+        if(Fn.validaRut(e.target.value)){
+            if(rutInput.classList.contains('is-invalid')){
+                rutInput.classList.remove('is-invalid');
             }
+        }else{
+            rutInput.classList.add('is-invalid');
         }
+    }
+}
 
 //función que valida el rut
 window.Fn = {
@@ -60,3 +63,64 @@ window.Fn = {
                 return S?S-1:'k';
             }
         }
+
+//funcion para crear usuario
+
+window.formCrearUsuario = document.getElementById('crear_usuario_form');
+if(window.formCrearUsuario){
+    window.formCrearUsuario.addEventListener('submit', function (event) {
+        event.preventDefault();
+        let rut = $("#rut").val();
+        if(rut.length <= 8 || window.Fn.validaRut(rut) == false ){
+            Swal.fire({
+                title: 'Error',
+                text: 'Ingrese un RUT válido (Eg. 12345678-9).',
+                icon: 'error'
+            });
+            return;
+        }
+
+        $("div").remove("#error_form_usuario");
+        var userFormData = new FormData();
+        userFormData.append('nombres', $("#nombres").val());
+        userFormData.append('apellido_paterno', $("#apellido_paterno").val());
+        userFormData.append('apellido_materno', $("#apellido_materno").val());
+        userFormData.append('rut', rut);
+        userFormData.append('email', $("#email").val());
+        userFormData.append('fecha_nacimiento', $("#fecha_nacimiento").val());
+        userFormData.append('password', $("#password").val());
+        userFormData.append('imagen', $("#imagen").prop('files')[0]);
+
+        axios.post('api/users', userFormData)
+                        .then(res => {
+                           if(res.data.ok){
+                                Swal.fire({
+                                    text: res.data.message,
+                                    icon: 'success',
+                                    timer: 2000,
+                                }).then(() => window.location.replace("/users"));
+                           }
+                        })
+                        .catch(err => {
+                            if(err.response.status == 422){
+                                
+                                let divError = (id, value) =>  $(`#${id}`).after(`<div id="error_form_usuario" class="invalid-feedback d-block">${value}</div>`);
+
+                                let errores = err.response.data.errors;
+
+                                for(let [key, value] of Object.entries(errores)){
+                                    if (key == 'password') {
+                                        divError('password_container', value);
+                                    } else if (value.length == 1 && key != 'password') {
+                                        divError(key, value);
+                                    } else {
+                                        for (var i = 0; i < value.length; i++) {
+                                            divError(key, value[i]);
+                                        }
+                                    }
+                                }
+
+                            }
+                        })
+});
+}
