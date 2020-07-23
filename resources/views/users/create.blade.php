@@ -3,7 +3,8 @@
 @section('title', 'Crear Usuario')
 
 @section('content')
-<div class="row justify-content-center my-3">
+@include('partials.header', [ 'show_inicio' => true ])
+<div class="row justify-content-center mb-4">
     <form class="col-md-6" id="crear_usuario_form" enctype="multipart/form-data">
         <div class="form-group">
               <label for="nombresInput">Nombres</label>
@@ -122,7 +123,7 @@
       >Guardar</button>
     </div>
     </form>
-</div>
+</>
 @endsection
 
 @push('scripts')
