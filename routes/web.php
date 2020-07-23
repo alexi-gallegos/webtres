@@ -14,6 +14,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', '/users');
-Route::get('users', 'UserController@index');
-Route::get('users/create', 'UserController@create');
+Route::get('users', 'UserController@index')->name('users_inicio');
+Route::get('users/create', 'UserController@create')->name('users_create');
 
