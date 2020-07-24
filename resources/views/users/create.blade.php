@@ -5,7 +5,7 @@
 @section('content')
 @include('partials.header', [ 'show_inicio' => true ])
 <div class="row justify-content-center mb-4">
-    <form class="col-md-6" id="crear_usuario_form" enctype="multipart/form-data">
+    <form method="POST" class="col-md-6" id="crear_usuario_form" enctype="multipart/form-data">
         <div class="form-group">
               <label for="nombresInput">Nombres</label>
               <input 
@@ -32,7 +32,6 @@
               <input 
                   type="text" 
                   name="apellido_materno"
-                  v-model="apellidoMaterno" 
                   class="form-control" 
                   id="apellido_materno"
                   required
@@ -56,7 +55,6 @@
               <input 
                   type="date" 
                   name="fecha_nacimiento"
-                  v-model="fechaNacimiento" 
                   class="form-control" 
                   id="fecha_nacimiento"
                   max=""
@@ -69,7 +67,6 @@
           <input 
               type="email" 
               name="email"
-              v-model="email" 
               class="form-control" 
               id="email"
               required
@@ -123,7 +120,7 @@
       >Guardar</button>
     </div>
     </form>
-</>
+</div>
 @endsection
 
 @push('scripts')
