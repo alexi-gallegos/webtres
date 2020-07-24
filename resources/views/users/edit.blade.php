@@ -81,23 +81,6 @@
         </div>
          <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="rutInput">RUT</label>
-                <input 
-                    type="text" 
-                    name="rut"
-                    class="form-control {{ $errors->has('rut') ? 'is-invalid' : '' }}" 
-                    value="{{ $user->rut }}"
-                    id="rut"
-                    required
-                    min="8"
-                >
-                @error('rut')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-                @enderror
-            </div>
-            <div class="form-group col-md-6">
                 <label for="fechaNacimientoInput">Fecha de nacimiento</label>
                 <input 
                     type="date" 
@@ -114,17 +97,6 @@
                 </div>
                 @enderror
             </div>
-        </div>
-        <div class="form-group">
-            <label for="emailInput">Email</label>
-            <input 
-                type="email" 
-                name="email"
-                value="{{ $user->email }}"
-                class="form-control" 
-                id="email"
-                required
-            >
         </div>
       <div class="row">
           <button 
