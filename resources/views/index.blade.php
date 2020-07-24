@@ -10,14 +10,25 @@
         .table{
           font-size: .85rem;
         }
+        .swal2-title{
+          display: block !important;
+        }
     </style>
 @endpush
 
 @section('content')
 @include('partials.header')
+@if (session('success'))
+<div class="alert alert-success alert-dismissible fade show col-md-6 text-center mx-auto" role="alert">
+    {{ session('success') }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+@endif
 <div class="row col-md-11 mx-auto">
   <h3>Usuarios</h3>
-  <a class="btn btn-primary ml-auto" href="{{ route('users_create') }}">Nuevo</a>
+  <a class="btn btn-primary ml-auto" href="{{ route('user_create') }}">Nuevo</a>
 </div>
 <table class="table col-md-9 mx-auto table-striped">
     <thead>
@@ -48,16 +59,29 @@
             <td>{{ $user->rut }}</td>
             <td>{{ \Carbon\Carbon::parse($user->fecha_nacimiento)->format('d/m/Y') }}</td>
             <td>{{ $user->email }}</td>
-            <td>
-                <a class="btn btn-sm btn-danger" href="">
-                    <i class="fas fa-trash"></i>
-                </a>
-                <a 
-                  class="btn btn-sm btn-warning" 
-                  href="{{ route('users_edit', ['id' => $user->id ]) }}"
+            <td class="row">
+                <form  method="POST" action="{{ route('user_delete', [ 'id' => $user->id ]) }}"
                 >
-                  <i class="fas fa-edit"></i>
-                </a>
+                  @csrf
+                  @method('delete')
+                  <input 
+                    type="hidden" 
+                    name="fullName" 
+                    value="{{ $user->nombres.' '.$user->apellido_paterno }}"
+                  >
+                  <button 
+                    type="submit" 
+                    class="btn btn-danger delete-user"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </form>
+                    <a 
+                      class="btn btn-sm btn-warning" 
+                      href="{{ route('user_edit', ['id' => $user->id ]) }}"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </a>
             </td>
         </tr>
       @endforeach
@@ -67,3 +91,7 @@
         {{ $users->links() }}
     </div>
 @endsection
+
+@push('scripts')
+    <script src="{{ asset('js/deleteUser.js') }}"></script>
+@endpush
