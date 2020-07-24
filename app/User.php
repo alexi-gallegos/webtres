@@ -66,6 +66,13 @@ class User extends Authenticatable
         return $this::findOrFail($id);
     }
 
+    public function update_user($request){
+        $this->nombres = $request->nombres;
+        $this->apellido_paterno = $request->apellido_paterno;
+        $this->apellido_materno = $request->apellido_materno;
+        $this->fecha_nacimiento = $request->fecha_nacimiento;
+    }
+
     public function change_photo($request){
         $file = $request->file('imagen');
         return $this->save_photo($file);
