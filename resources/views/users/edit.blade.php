@@ -5,7 +5,7 @@
 @section('content')
 @include('partials.header', ['show_inicio' => true])
 <div class="row justify-content-center mb-4">
-    <form method="POST" action="{{ route('users_update') }}" class="row col-md-8" id="editar_usuario_form">
+    <form method="POST" action="{{ route('user_update') }}" class="row col-md-8" id="editar_usuario_form">
         @csrf
         @method('PATCH')
         <input type="hidden" name="id" value="{{ $user->id }}">
@@ -111,25 +111,7 @@
 
 @push('scripts')
     <script>
-        var id = {{ $user->id }};
-        function changePhoto(e){
-                e.preventDefault();
-                var imagenFormData = new FormData();
-                imagenFormData.append('imagen', $("#imagen").prop('files')[0]);
-                imagenFormData.append('id', id);
-                axios.post('api/users/change_photo', imagenFormData)
-                            .then(res => console.log(res))
-                            .catch(err => console.log(err.response))
-        }
-
-        function changeInputImage(e){
-            if(e.target.files[0]){
-                var imagenPreviewURL = URL.createObjectURL(e.target.files[0]);
-                $("#imagen_perfil").attr("src", imagenPreviewURL);
-                if(!$("#btnNuevaFoto").length){
-                    $("#helpTextImagen").after('<button id="btnNuevaFoto" class="btn btn-success ml-5" onclick="changePhoto(event)">Actualizar Foto</button>');
-                }
-            }
-        }
+        var idUser = {{ $user->id }};
     </script>
+    <script src="{{ asset('js/editUser.js') }}"></script>
 @endpush
