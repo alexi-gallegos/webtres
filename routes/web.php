@@ -15,7 +15,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/users');
 Route::get('users', 'UserController@index')->name('users_inicio');
-Route::get('users/create', 'UserController@create')->name('users_create');
-Route::get('users/edit/{id}', 'UserController@edit')->name('users_edit');
-Route::patch('users', 'UserController@update')->name('users_update');
+Route::get('users/create', 'UserController@create')->name('user_create');
+Route::get('users/edit/{id}', 'UserController@edit')->name('user_edit');
+Route::patch('users', 'UserController@update')->name('user_update');
+Route::delete('users', 'UserController@delete')->name('user_delete');
 
