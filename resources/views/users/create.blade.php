@@ -57,7 +57,7 @@
                   name="fecha_nacimiento"
                   class="form-control" 
                   id="fecha_nacimiento"
-                  max=""
+                  max="{{ date('Y-m-d') }}"
                   required
               >
           </div>
