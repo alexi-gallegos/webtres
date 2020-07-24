@@ -9,9 +9,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Image;
 use Illuminate\Support\Facades\Storage;
 
-\Carbon\Carbon::setToStringFormat('d/m/Y');
-
-
 class User extends Authenticatable
 {
     use Notifiable;
@@ -44,10 +41,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    protected $dates = ['fecha_nacimiento'];
-
     public function get_users(){
-        return $this::select('rut', 'nombres', 'apellido_paterno', 'apellido_materno','fecha_nacimiento', 'email', 'imagen')
+        return $this::select('id','rut', 'nombres', 'apellido_paterno', 'apellido_materno','fecha_nacimiento', 'email', 'imagen')
                                     ->orderBy('created_at', 'desc')
                                     ->paginate(6);
     }
@@ -55,12 +50,7 @@ class User extends Authenticatable
     public function store($request){
         if($request->hasFile('imagen')){
             $file = $request->file('imagen');
-            $img = Image::make($file->getRealPath());
-            $img->resize(200, 200, function ($constraint) {
-                $constraint->aspectRatio();
-            })->stream();
-            $filename = uniqid().'.'.$file->getClientOriginalExtension();
-            Storage::disk('images')->put($filename,   $img);
+            $filename = $this->save_photo($file);
         }
         $this->nombres = $request->nombres;
         $this->apellido_paterno = $request->apellido_paterno;
@@ -70,6 +60,32 @@ class User extends Authenticatable
         $this->imagen = $filename;
         $this->email = $request->email;
         $this->password = $request->password;
+    }
+
+    public function get_user($id){
+        return $this::findOrFail($id);
+    }
+
+    public function change_photo($request){
+        $file = $request->file('imagen');
+        return $this->save_photo($file);
+    }
+
+    private function save_photo($file){
+        $img = Image::make($file->getRealPath());
+        $img->resize(200, 200, function ($constraint) {
+            $constraint->aspectRatio();
+        })->stream();
+        $filename = uniqid().'.'.$file->getClientOriginalExtension();
+        $file_saved = Storage::disk('images')->put($filename,   $img);
+        if($file_saved){
+            return $filename;
+        }
+        return null;
+    }
+
+    public function delete_photo($filename){
+        return Storage::disk('images')->delete($filename);
     }
 
 }
